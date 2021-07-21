@@ -135,6 +135,12 @@ function listarTarefas() {
 
     // ler a lista de tarefas do local storage
     lista = lerLocalStorage("listaTarefas")
+    // se não existir lista no local storage, armazenar uma vazia
+    if (!lista) {
+        lista = []
+        localStorage.setItem("listaTarefas", JSON.stringify(lista))
+    }
+
     // adicionar a lista na página novamente
     var divLista = document.getElementById("divLista")
     for (i=0; i<lista.length; i++) {

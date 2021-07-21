@@ -1,5 +1,5 @@
 body {
-    background: lightblue;
+    background: #132279;
 }
 
 header {
@@ -20,14 +20,14 @@ img {
 .botao {
     color: #FFFFFF;
     font-family: Arial, Helvetica, sans-serif;
-    background: #3a3ccf;
+    background: #040b30;
     padding: 8px 24px;
-    border-radius: 30px;
+    border-radius: 5px;
     transition-duration: 0.4s;
 }
 
 .botao:hover {
-    background-color: #5c79b9; 
+    background: lightskyblue;
     color: white;
 }
 
@@ -63,6 +63,11 @@ label.done {
     text-decoration: line-through;
 }
 
+footer {
+    margin-top: 15px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 
 
