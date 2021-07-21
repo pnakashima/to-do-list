@@ -2,13 +2,20 @@ body {
     background: lightblue;
 }
 
-.to-do {
-    text-decoration: none;
+header {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.done {
-    text-decoration: line-through;
+img {
+    width: 5%;
+    vertical-align: middle;
 }
+
+#inputTarefa {
+    height: 30px;
+    width: 250px;
+}    
 
 .botao {
     color: #FFFFFF;
@@ -19,9 +26,26 @@ body {
     transition-duration: 0.4s;
 }
 
-button:hover {
+.botao:hover {
     background-color: #5c79b9; 
     color: white;
+}
+
+#divLista {
+    width: 600px;
+    background-color: white;
+}
+
+.lixeira {
+    color: #FFFFFF;
+    background: white;
+    margin: 12px 0px 16px ;
+    padding: 8px 8px;
+}
+
+.checkbox {
+    transform: scale(2);
+    margin: 16px 10px 16px;
 }
 
 label {
@@ -31,39 +55,27 @@ label {
     max-width: 600px;
 }
 
-.remover {
-    color: #FFFFFF;
-    font-family: Arial, Helvetica, sans-serif;
-    background: white;
-    margin: 12px 0px 16px ;
-    padding: 8px 8px;
-    border-radius: 30px;
-    transition-duration: 0.4s;
+label.to-do {
+    text-decoration: none;
 }
 
-.tarefa {
-    transform: scale(2);
-    margin: 16px 10px 16px;
-}
-
-#inputTarefa {
-    height: 30px;
-    width: 250px;
-}    
-
-header {
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+label.done {
+    text-decoration: line-through;
 }
 
 
-#divLista {
-    width: 600px;
-    background-color: white;
-}
 
-img {
-    width: 5%;
-    vertical-align: middle;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
