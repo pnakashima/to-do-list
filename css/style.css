@@ -14,7 +14,7 @@ img {
 
 #inputTarefa {
     height: 30px;
-    width: 250px;
+    width: 330px;
 }    
 
 .botao {
@@ -22,12 +22,13 @@ img {
     font-family: Arial, Helvetica, sans-serif;
     background: #040b30;
     padding: 8px 24px;
+    border: 2px solid #3e52c0;
     border-radius: 5px;
     transition-duration: 0.4s;
 }
 
 .botao:hover {
-    background: lightskyblue;
+    background: #3e52c0;
     color: white;
 }
 
@@ -52,7 +53,7 @@ label {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 22px;
     padding-left: 15px;
-    max-width: 600px;
+    max-width: 580px;
 }
 
 label.to-do {
