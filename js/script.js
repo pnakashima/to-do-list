@@ -11,7 +11,7 @@ function lerLocalStorage(item) {
 function verificaTarefa(lista, tarefa) {
     for (let i=0; i<lista.length; i++) {
         let tarefaLista = lista[i]
-        if (tarefaLista["Tarefa"].toLowerCase() == tarefa.value.toLowerCase()) {
+        if (tarefaLista["Tarefa"].toLowerCase() == tarefa.value.trim().toLowerCase()) {
             alert("Esta tarefa já está na lista de afazeres.")
             tarefa.value = ''
             tarefa.focus()
@@ -49,12 +49,12 @@ function adicionarTarefa() {
     // armazenando a tarefa digitada em uma variável 
     let campoTarefa = document.getElementById("inputTarefa")
     
-    if (campoTarefa.value) {
+    if (campoTarefa.value.trim()) {
         // verifica se a tarefa já existe na lista
         if (verificaTarefa(lista, campoTarefa)) {
             // armazenando a tarefa na lista do local storage
             let tarefa = {
-                "Tarefa": campoTarefa.value,
+                "Tarefa": campoTarefa.value.trim(),
                 "Status": "to-do"
             }
             lista.push(tarefa)
@@ -68,6 +68,8 @@ function adicionarTarefa() {
     } else {
         // caso o usuário não digite nada, exibe um alerta
         alert("Por favor digite uma tarefa")
+        campoTarefa.value = ''
+        campoTarefa.focus()
     }
 }
 
