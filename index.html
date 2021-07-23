@@ -12,20 +12,29 @@
 <body onload=listarTarefas()>
 
     <header>
-        <h1><img src="img/list.png"> Lista de Afazeres</h1>
+        Lista de Afazeres
+        <a href="#" class="topo" title="Clique aqui para ir para o topo da lista">Topo da Lista</a>
+        <a href="#footer" title="Clique aqui para ir para o final da lista">Final da Lista</a>
     </header>
+
+    <div>
+        <h1><img src="img/list.png"> Lista de Afazeres</h1>
+    </div>
 
     <div id="divPrincipal">
         <input autocomplete="off" type="text" id="inputTarefa" placeholder="Digite uma tarefa">
         <button onclick="adicionarTarefa()" id="addBtn" class="botao" title="Adicionar tarefa à lista">Adicionar</button>
         <button onclick="resetarLista()" class="botao" title="Limpar lista de tarefas">Limpar Lista</button>
+        <br>
     </div>
 
     <br>
 
     <div id="divLista"></div>
 
-    <footer>criado por Paulo Nakashima</footer>
+    <footer id="footer">
+        <a href="https://github.com/pnakashima" target="_blank">criado por <strong>Paulo Nakashima</strong></a> 
+    </footer>
 
 </body>
 </html>
