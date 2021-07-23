@@ -1,135 +1,3 @@
-// funções para ler, editar e remover itens, e apagar a lista inteira do local storage:
-
-// função que lê um item do local storage
-function lerLocalStorage(item) { 
-    let itemLido = localStorage.getItem(item)
-    itemLido = JSON.parse(itemLido)
-    return itemLido
-}
-
-// função que verifica se a tarefa já está na lista
-function verificaTarefa(lista, tarefa) {
-    for (let i=0; i<lista.length; i++) {
-        let tarefaLista = lista[i]
-        if (tarefaLista["Tarefa"].toLowerCase() == tarefa.value.trim().toLowerCase()) {
-            alert("Esta tarefa já está na lista de afazeres.")
-            tarefa.value = ''
-            tarefa.focus()
-            return false
-        }
-    }
-    return true
-}
-
-// função que altera o status da tarefa na lista do local storage
-function alterarLista(status, texto) {
-    // ler a lista do local storage
-    let lista = lerLocalStorage("listaTarefas")
-    // criar uma lista auxiliar
-    let novaLista = []
-    // percorrer a lista original
-    for (let i=0; i<lista.length; i++) {
-        let tarefa = lista[i]
-        // se for a tarefa clicada, alterar o status e coloca na lista auxiliar; senão adiciona como está
-        if (texto == tarefa["Tarefa"]) {
-            tarefa["Status"] = status
-            novaLista.push(tarefa)
-        } else {
-            novaLista.push(tarefa)
-        }
-    }
-    // armazenando a nova lista
-    localStorage.setItem("listaTarefas", JSON.stringify(novaLista))
-}
-
-// função que adiciona uma tarefa na lista do local storage e imprime a lista na página
-function adicionarTarefa() {
-    // ler a lista de tarefas do local storage
-    let lista = lerLocalStorage("listaTarefas")
-    // armazenando a tarefa digitada em uma variável 
-    let campoTarefa = document.getElementById("inputTarefa")
-    
-    if (campoTarefa.value.trim()) {
-        // verifica se a tarefa já existe na lista
-        if (verificaTarefa(lista, campoTarefa)) {
-            // armazenando a tarefa na lista do local storage
-            let tarefa = {
-                "Tarefa": campoTarefa.value.trim(),
-                "Status": "to-do"
-            }
-            lista.push(tarefa)
-            localStorage.setItem("listaTarefas", JSON.stringify(lista))
-            // imprimindo a lista na tela
-            listarTarefas()
-            // limpando o campo de entrada
-            campoTarefa.value = ''
-            campoTarefa.focus()
-        }
-    } else {
-        // caso o usuário não digite nada, exibe um alerta
-        alert("Por favor digite uma tarefa")
-        campoTarefa.value = ''
-        campoTarefa.focus()
-    }
-}
-
-// função que apaga a tarefa da lista
-function apagarItem() {
-    // identificando a tarefa clicada
-    let idSelecionado = this.getAttribute("id") // o id selecionado vai ser "lixeira" + um número
-    let id = idSelecionado.slice(7) // variavel id vai ser só o número
-    // selecionar a tarefa (label) correspondente
-    let labelSelecionado = document.getElementById("tarefa" + id)
-    // confirmar exclusão de tarefa
-    let excluir = confirm("Deseja excluir a tarefa \"" + labelSelecionado.innerText + "\"?")
-    if (excluir) {
-        // ler a lista de tarefas do local storage
-        let lista = lerLocalStorage("listaTarefas")
-        // percorrer a lista e procurar a tarefa
-        for (let i=0; i<lista.length; i++) {
-            let tarefa = lista[i]
-            if (tarefa["Tarefa"] == labelSelecionado.innerText) {
-                // remover a tarefa do local storage
-                lista.splice(i,1)
-            }
-        }
-        // armazenando a nova lista no local storage
-        localStorage.setItem("listaTarefas", JSON.stringify(lista))
-        // imprimindo a lista na tela
-        listarTarefas()
-    }
-}
-
-// função que apaga a lista do local storage e da página
-function resetarLista() {
-    let excluir = confirm("Deseja apagar toda a lista?")
-
-    if (excluir) {
-        // apaga a lista do local storage, listaTarefas = []
-        localStorage.setItem("listaTarefas", JSON.stringify([])) 
-        // apagar a lista da página
-        let node = document.getElementById("divLista")
-        while (node.firstChild) {
-            node.removeChild(node.firstChild)
-        }
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////
-
-// funções que manipulam a página
-
-// cada vez que for adicionado ou removido um item da lista, 
-// a lista vai ser apagada da página e adicionada novamente
-
-// função que apaga todos os filhos de um nó da página
-function apagarFilhos(node_id) {
-    let node = document.getElementById(node_id)
-    while (node.firstChild) {
-        node.removeChild(node.firstChild)
-    }
-}
-
 // função que monta a lista na página, a partir da lista do local storage
 function listarTarefas() {
     // apagar a lista da página
@@ -137,11 +5,6 @@ function listarTarefas() {
 
     // ler a lista de tarefas do local storage
     let lista = lerLocalStorage("listaTarefas")
-    // se não existir lista no local storage, armazenar uma vazia
-    if (!lista) {
-        lista = []
-        localStorage.setItem("listaTarefas", JSON.stringify(lista))
-    }
 
     // adicionar a lista na página novamente
     let divLista = document.getElementById("divLista")
@@ -157,6 +20,67 @@ function listarTarefas() {
         // adicionando uma quebra de linha
         let br = document.createElement("br")
         divLista.appendChild(br)
+    }
+}
+
+// função que apaga todos os filhos de um nó da página
+function apagarFilhos(node_id) {
+    let node = document.getElementById(node_id)
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+// função que lê um item do local storage
+function lerLocalStorage(item) { 
+    let itemLido = localStorage.getItem(item)
+    // se não existir lista no local storage, armazenar uma vazia
+    if (!itemLido) {
+        itemLido = []
+        localStorage.setItem("listaTarefas", JSON.stringify(itemLido))
+        return itemLido
+    }
+    itemLido = JSON.parse(itemLido)
+    return itemLido
+}
+
+// função que cria o ícone de lixeira para cada tarefa na página
+function criarLixeira(i) {
+    let lixeira = document.createElement("img")
+    lixeira.setAttribute("id", "lixeira" + i)
+    lixeira.setAttribute("class", "lixeira")
+    lixeira.setAttribute("title", "Remover tarefa")
+    lixeira.setAttribute("src", "img/trash.png")
+    let divLista = document.getElementById("divLista")   
+    divLista.appendChild(lixeira)
+    // criando o event listener no botao de remover
+    lixeira.addEventListener('click', apagarItem)
+}
+
+// função que apaga a tarefa da lista
+function apagarItem() {
+    // identificando a tarefa clicada
+    let idSelecionado = this.getAttribute("id") // o id selecionado vai ser "lixeira" + um número
+    let id = idSelecionado.slice(7) // variavel id vai ser só o número
+    // selecionar a tarefa (label) correspondente
+    let labelSelecionado = document.getElementById("tarefa" + id)
+    // confirmar exclusão de tarefa
+    let excluir = confirm("Deseja excluir a tarefa \"" + labelSelecionado.textContent + "\"?")
+    if (excluir) {
+        // ler a lista de tarefas do local storage
+        let lista = lerLocalStorage("listaTarefas")
+        // percorrer a lista e procurar a tarefa
+        for (let i=0; i<lista.length; i++) {
+            let tarefa = lista[i]
+            if (tarefa["Tarefa"] == labelSelecionado.textContent) {
+                // remover a tarefa do local storage
+                lista.splice(i,1)
+            }
+        }
+        // armazenando a nova lista no local storage
+        localStorage.setItem("listaTarefas", JSON.stringify(lista))
+        // imprimindo a lista na tela
+        listarTarefas()
     }
 }
 
@@ -186,7 +110,7 @@ function statusTarefa() {
     // selecionando o label/tarefa correspondente ao checkbox clicado
     let tarefaSelecionada = document.getElementById("tarefa" + i)
     // obtendo o texto do label
-    let texto = tarefaSelecionada.innerText
+    let texto = tarefaSelecionada.textContent
     // alterando a classe do label/tarefa e a lista no local storage
     if(this.checked) {
         tarefaSelecionada.setAttribute("class", "done")
@@ -197,17 +121,25 @@ function statusTarefa() {
     }
 }
 
-// função que cria o ícone de lixeira para cada tarefa na página
-function criarLixeira(i) {
-    let lixeira = document.createElement("img")
-    lixeira.setAttribute("id", "lixeira" + i)
-    lixeira.setAttribute("class", "lixeira")
-    lixeira.setAttribute("title", "Remover tarefa")
-    lixeira.setAttribute("src", "img/trash.png")
-    let divLista = document.getElementById("divLista")   
-    divLista.appendChild(lixeira)
-    // criando o event listener no botao de remover
-    lixeira.addEventListener('click', apagarItem)
+// função que altera o status da tarefa na lista do local storage
+function alterarLista(status, texto) {
+    // ler a lista do local storage
+    let lista = lerLocalStorage("listaTarefas")
+    // criar uma lista auxiliar
+    let novaLista = []
+    // percorrer a lista original
+    for (let i=0; i<lista.length; i++) {
+        let tarefa = lista[i]
+        // se for a tarefa clicada, alterar o status e coloca na lista auxiliar; senão adiciona como está
+        if (texto == tarefa["Tarefa"]) {
+            tarefa["Status"] = status
+            novaLista.push(tarefa)
+        } else {
+            novaLista.push(tarefa)
+        }
+    }
+    // armazenando a nova lista
+    localStorage.setItem("listaTarefas", JSON.stringify(novaLista))
 }
 
 // função que cria o label da tarefa na página
@@ -216,10 +148,69 @@ function criarLabel(i, tarefa) {
     labelCheck.setAttribute("for", "checkbox" + i)
     labelCheck.setAttribute("id", "tarefa" + i)
     labelCheck.setAttribute("class", tarefa["Status"])
-    labelCheck.innerText = tarefa["Tarefa"]     
+    labelCheck.textContent = tarefa["Tarefa"]
     let divLista = document.getElementById("divLista")   
     divLista.appendChild(labelCheck)    
 }
 
+// função que adiciona uma tarefa na lista do local storage e imprime a lista na página
+function adicionarTarefa() {
+    // ler a lista de tarefas do local storage
+    let lista = lerLocalStorage("listaTarefas")
+    // armazenando a tarefa digitada em uma variável 
+    let campoTarefa = document.getElementById("inputTarefa")
 
+    if (campoTarefa.value.trim()) {
+        // verifica se a tarefa já existe na lista
+        if (verificaTarefa(lista, campoTarefa)) {
+            // armazenando a tarefa na lista do local storage
+            let tarefa = {
+                "Tarefa": campoTarefa.value.trim(),
+                "Status": "to-do"
+            }
+            lista.push(tarefa)
+            localStorage.setItem("listaTarefas", JSON.stringify(lista))
+            // imprimindo a lista na tela
+            listarTarefas()
+            // limpando o campo de entrada
+            campoTarefa.value = ''
+            campoTarefa.focus()
+        }
+    } else {
+        // caso o usuário não digite nada, exibe um alerta
+        alert("Por favor digite uma tarefa")
+        campoTarefa.value = ''
+        campoTarefa.focus()
+    }
+}
+
+// função que verifica se a tarefa já está na lista
+function verificaTarefa(lista, tarefa) {
+    for (let i=0; i<lista.length; i++) {
+        let item = lista[i]
+        if (item["Tarefa"].toLowerCase() == tarefa.value.trim().toLowerCase()) {
+            alert("Esta tarefa já está na lista de afazeres.")
+            tarefa.value = ''
+            tarefa.focus()
+            return false
+        }
+    }
+    return true
+}
+
+
+// função que apaga a lista do local storage e da página
+function resetarLista() {
+    let excluir = confirm("Deseja apagar toda a lista?")
+
+    if (excluir) {
+        // apaga a lista do local storage, listaTarefas = []
+        localStorage.setItem("listaTarefas", JSON.stringify([])) 
+        // apagar a lista da página
+        let node = document.getElementById("divLista")
+        while (node.firstChild) {
+            node.removeChild(node.firstChild)
+        }
+    }
+}
 
